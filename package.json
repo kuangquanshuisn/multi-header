@@ -1,0 +1,7 @@
+{
+  "name": "multi-header",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test", "check": "node --check background.js && node --check core.js && node --check popup.js" }
+}

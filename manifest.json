@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Multi Header · 请求头管理",
+  "version": "1.0.0",
+  "description": "按环境统一添加或覆盖 HTTP / HTTPS 请求头，支持多组 Key / Value 与独立开关。",
+  "minimum_chrome_version": "101",
+  "permissions": ["storage", "declarativeNetRequestWithHostAccess"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "background": { "service_worker": "background.js", "type": "module" },
+  "action": {
+    "default_title": "Multi Header · 请求头管理",
+    "default_popup": "popup.html",
+    "default_icon": { "16": "icons/icon16.png", "32": "icons/icon32.png" }
+  },
+  "icons": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png" },
+  "options_page": "popup.html"
+}
