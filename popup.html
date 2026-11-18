@@ -22,7 +22,7 @@
           <div class="sidebar-note"><span class="tiny-orbit">◎</span><p>一次只启用一个环境<br>切换即生效</p></div>
         </aside>
         <main>
-          <div class="environment-heading"><div><div class="eyebrow">ENVIRONMENT / 请求配置</div><h2 id="environment-title">正在加载…</h2></div><div class="environment-actions"><button id="rename-environment" class="icon-button" title="重命名环境" aria-label="重命名环境" disabled>✎</button><button id="delete-environment" class="icon-button danger" title="删除环境" aria-label="删除环境" disabled>×</button></div></div>
+          <div class="environment-heading"><div><div class="eyebrow">ENVIRONMENT / 请求配置</div><h2 id="environment-title">正在加载…</h2></div><div class="environment-actions"><button id="copy-environment" class="icon-button" title="复制环境" aria-label="复制环境" disabled>⧉</button><button id="rename-environment" class="icon-button" title="重命名环境" aria-label="重命名环境" disabled>✎</button><button id="delete-environment" class="icon-button danger" title="删除环境" aria-label="删除环境" disabled>×</button></div></div>
           <div class="scope-banner"><span class="scope-icon" aria-hidden="true">↗</span><div><strong>全局请求头</strong><p>对所有 HTTP / HTTPS 请求添加或覆盖以下参数</p></div><span class="protocol">HTTP<span>/</span>HTTPS</span></div>
           <div class="table-title"><h3>请求头参数 <span id="header-count">0</span></h3><span>同名 Key 自动覆盖</span></div>
           <div class="headers-table"><div class="table-head"><span>启用</span><span>KEY <small>参数名</small></span><span>VALUE <small>参数值</small></span><span></span></div><div id="header-list"></div></div>
@@ -33,6 +33,6 @@
       </div>
       <footer><div class="save-status"><span id="status-dot" class="status-dot"></span><span id="save-status" role="status" aria-live="polite">正在连接…</span></div><div class="footer-actions"><span class="local-label">配置仅保存在本机</span><button id="reload" title="重新加载配置">重新加载</button><button id="open-options" title="在完整页面中管理">展开 ↗</button></div></footer>
     </div>
-    <dialog id="environment-dialog"><form id="environment-form"><div class="dialog-eyebrow">WORKSPACE</div><h2 id="dialog-title">添加环境</h2><p id="dialog-description">为这组请求头设置一个好记的名字。</p><label for="environment-name">环境名称</label><input id="environment-name" maxlength="40" placeholder="例如：测试环境" autocomplete="off" required><p id="dialog-error" class="dialog-error" role="alert"></p><div class="dialog-buttons"><button id="dialog-cancel" type="button" class="button secondary">取消</button><button id="dialog-confirm" type="submit" class="button primary">添加环境</button></div></form></dialog>
+    <dialog id="environment-dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description"><form id="environment-form"><div class="dialog-eyebrow">WORKSPACE</div><h2 id="dialog-title">添加环境</h2><p id="dialog-description">为这组请求头设置一个好记的名字。</p><label for="environment-name">环境名称</label><input id="environment-name" maxlength="40" placeholder="例如：测试环境" autocomplete="off" required><p id="dialog-error" class="dialog-error" role="alert"></p><div class="dialog-buttons"><button id="dialog-cancel" type="button" class="button secondary">取消</button><button id="dialog-confirm" type="submit" class="button primary">添加环境</button></div></form></dialog>
   </body>
 </html>

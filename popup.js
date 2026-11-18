@@ -174,23 +174,34 @@ function render() {
   $('environment-title').textContent = currentEnvironment().name;
   $('delete-environment').disabled = config.environments.length <= 1;
   $('delete-environment').title = config.environments.length <= 1 ? '至少需要保留一个环境' : '删除环境';
-  $('add-environment').disabled = config.environments.length >= 50;
+  const atEnvironmentLimit = config.environments.length >= 50;
+  $('add-environment').disabled = atEnvironmentLimit;
+  $('copy-environment').disabled = atEnvironmentLimit;
+  $('copy-environment').title = atEnvironmentLimit ? '最多支持 50 个环境' : '复制环境';
   $('add-header').disabled = currentEnvironment().headers.length >= 100;
   renderEnvironments();
   renderHeaders();
 }
 
 function openEnvironmentDialog(mode) {
+  const environment = currentEnvironment();
+  const dialogs = {
+    add: { title: '添加环境', confirm: '添加环境', description: '为这组请求头设置一个好记的名字。' },
+    copy: { title: '复制环境', confirm: '确认复制', description: `将「${environment.name}」的全部请求头复制到新环境，请输入新环境名称。` },
+    rename: { title: '重命名环境', confirm: '保存名称', description: '为这组请求头设置一个好记的名字。' },
+    delete: { title: '删除环境', confirm: '确认删除', description: `确定删除「${environment.name}」及其全部请求头？删除后将切换到另一个环境。` },
+  };
+  const { title, confirm, description } = dialogs[mode];
   dialogMode = mode;
-  dialogEnvironmentId = currentEnvironment().id;
+  dialogEnvironmentId = environment.id;
   const deleting = mode === 'delete';
-  $('dialog-title').textContent = mode === 'add' ? '添加环境' : deleting ? '删除环境' : '重命名环境';
-  $('dialog-description').textContent = deleting ? `确定删除「${currentEnvironment().name}」及其全部请求头？删除后将切换到另一个环境。` : '为这组请求头设置一个好记的名字。';
+  $('dialog-title').textContent = title;
+  $('dialog-description').textContent = description;
   $('environment-name').hidden = deleting;
   $('environment-name').required = !deleting;
   document.querySelector('label[for="environment-name"]').hidden = deleting;
-  $('environment-name').value = mode === 'rename' ? currentEnvironment().name : '';
-  $('dialog-confirm').textContent = mode === 'add' ? '添加环境' : deleting ? '确认删除' : '保存名称';
+  $('environment-name').value = mode === 'rename' ? environment.name : '';
+  $('dialog-confirm').textContent = confirm;
   $('dialog-confirm').className = `button ${deleting ? 'destructive' : 'primary'}`;
   $('dialog-error').textContent = '';
   $('environment-dialog').showModal();
@@ -210,6 +221,7 @@ $('add-header').addEventListener('click', () => {
   void persist();
 });
 $('add-environment').addEventListener('click', () => openEnvironmentDialog('add'));
+$('copy-environment').addEventListener('click', () => openEnvironmentDialog('copy'));
 $('rename-environment').addEventListener('click', () => openEnvironmentDialog('rename'));
 $('delete-environment').addEventListener('click', () => openEnvironmentDialog('delete'));
 $('dialog-cancel').addEventListener('click', () => $('environment-dialog').close());
@@ -218,14 +230,18 @@ $('environment-form').addEventListener('submit', event => {
   const name = $('environment-name').value.trim();
   if (dialogMode !== 'delete') {
     if (!name) { $('dialog-error').textContent = '请输入环境名称。'; return; }
-    if (config.environments.some(environment => environment.name === name && (dialogMode === 'add' || environment.id !== dialogEnvironmentId))) {
+    if (config.environments.some(environment => environment.name === name && (dialogMode !== 'rename' || environment.id !== dialogEnvironmentId))) {
       $('dialog-error').textContent = '环境名称已存在，请换一个名称。';
       return;
     }
   }
-  if (dialogMode === 'add') {
+  if (dialogMode === 'add' || dialogMode === 'copy') {
     if (config.environments.length >= 50) return;
     const environment = createEnvironment(name);
+    if (dialogMode === 'copy') {
+      const source = config.environments.find(item => item.id === dialogEnvironmentId);
+      environment.headers = source.headers.map(header => ({ ...header, id: crypto.randomUUID() }));
+    }
     config.environments.push(environment);
     config.activeEnvironmentId = environment.id;
   } else if (dialogMode === 'rename') {
